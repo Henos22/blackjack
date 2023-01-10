@@ -55,7 +55,8 @@ def players_initial_draw(shuffled_deck: list) -> tuple:
     players_hand = []
     random_draw = random.choices(shuffled_deck,k = 2)
     players_hand.append(random_draw)
-    shuffled_deck.remove(random_draw)
+    for card in random_draw:
+        shuffled_deck.remove(card)
     return players_hand[0], shuffled_deck
 
 
@@ -71,12 +72,26 @@ def dealers_initial_draw(shuffled_deck: list) -> tuple:
 
     dealers_hand = []
     random_draw = random.choices(shuffled_deck,k = 2)
-    print(random_draw)
-    print(shuffled_deck)
     dealers_hand.append(random_draw)
-    shuffled_deck.remove(random_draw)
+    for card in random_draw:
+        shuffled_deck.remove(card)
     return dealers_hand[0], shuffled_deck
 
+def get_card_value(card: str)-> int or tuple:
+    """Finds the point value of a given card
+
+    Args:
+        card (str): any card
+
+    Returns:
+        int or tuple: the point value of the card
+    """
+    if card[0].isnumeric():
+        return int(card[0])
+    if card[0] == 'J' or card[0] == 'Q' or card[0] == 'K':
+        return 10
+    if card[0] == 'A':
+        return [1,10]
 
 if __name__ == "__main__":
     deck = generate_deck()
@@ -88,5 +103,4 @@ if __name__ == "__main__":
         initial_player_hand, deck = players_initial_draw(shuffled_deck)
         initial_dealer_hand, deck = dealers_initial_draw(deck)
         console.print(f" You have drawn the {initial_player_hand[0]} and the {initial_player_hand[1]}", style = "magenta")
-        console.print(f" The dealer has drawn the {initial_dealer_hand[0]} and the ???")
-
+        console.print(f" The dealer has drawn the {initial_dealer_hand[0]} and the ???", style = "magenta")
