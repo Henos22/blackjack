@@ -1,4 +1,5 @@
 import random
+import time
 from typing import Union
 
 from rich.console import Console
@@ -141,7 +142,7 @@ def draw_card(hand: list,deck: list,player:str) -> tuple:
     hand.append(new_card)
     deck.remove(new_card)
     new_hand = hand
-    console.print(f" {player} has drawn the {new_card} \n ----- {player} has {hand_value(new_hand)} -----", style = "#55d4ff")
+    console.print(f" {player.capitalize()} has drawn the {new_card} \n ----- {player} has {hand_value(new_hand)} -----", style = "#55d4ff")
     return new_hand, deck
 
 
@@ -217,6 +218,7 @@ def dealers_turn(hand: list, deck: list) -> tuple:
         tuple: dealer's new hand and deck with card removed
     """
     dealers_points = hand_value(hand)
+    time.sleep(1.5)
     if dealers_points < 16:
         new_hand, deck = draw_card(hand,deck,"dealer")
         return dealers_turn(new_hand,deck)
@@ -235,6 +237,7 @@ def result_messages(winner: str) -> None:
     Args:
         winner (str): player name or dealer
     """
+    time.sleep(1)
     if winner == "player":
         console.print(f" Congratulations! \n {player_name} has won the hand", style = "#55d4ff")
     elif winner == "dealer":
@@ -260,7 +263,7 @@ def trigger_dealer_turn(hand:list,deck: list) -> None:
         return check_winner(dealers_points,players_points)
     else:
         console.print(" Dealer has gone BUST!", style = "#55d4ff")
-        return result_messages(player_name)
+        return result_messages("player")
     
 
 
@@ -273,6 +276,7 @@ if __name__ == "__main__":
         console.print("    ----------------- Come again soon ----------------------", style = "magenta",justify = "center")
     else:
         player_name = prompt.ask("[magenta]    --------------- Enter your name to begin --------------[/magenta]")
+        player_name = player_name.capitalize()
         initial_player_hand, deck = players_initial_draw(shuffled_deck)
         initial_dealer_hand, deck = dealers_initial_draw(deck)
         players_points = hand_value(initial_player_hand)
@@ -289,6 +293,7 @@ if __name__ == "__main__":
             result_messages("no winner")
              
         elif player_natural_blackjack_check and dealer_natural_blackjack_check is False:
+            time.sleep(1)
             console.print(f" BLACKJACK! \n ------ Dealer's turn ----\n The dealer has drawn the {initial_dealer_hand[0]} and the {initial_dealer_hand[1]}",style = "#55d4ff")
             console.print(f"----- Dealer has {hand_value(initial_dealer_hand)} -----", style = "#55d4ff")
             console.print("------------------",style = "#55d4ff")
